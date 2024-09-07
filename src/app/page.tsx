@@ -1,10 +1,17 @@
-'use client'
+'use client';
 
-import { Box, Heading, Text, VStack, Container, Button } from '@chakra-ui/react'
+import {
+  Box,
+  Heading,
+  Text,
+  VStack,
+  Container,
+  Button,
+} from '@chakra-ui/react';
 
 export default function Home() {
   return (
-    <Box minHeight="100vh">     
+    <Box minHeight="100vh">
       {/* Hero section */}
       <Box
         height="80vh"
@@ -21,12 +28,12 @@ export default function Home() {
             height="100%"
             maxWidth="600px"
           >
-            
             <Heading as="h1" size="3xl" lineHeight="1.2" color="white">
               Discover Inner Peace at Down Dawgs
             </Heading>
             <Text fontSize="xl" color="white">
-              Embark on a transformative journey through yoga and meditation for self-discovery and balance
+              Embark on a transformative journey through yoga and meditation for
+              self-discovery and balance
             </Text>
             <Button colorScheme="teal" size="lg">
               Get Started

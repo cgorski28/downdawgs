@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { Flex, Link as ChakraLink, Spacer } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import { Flex, Link as ChakraLink, Spacer } from '@chakra-ui/react';
+import NextLink from 'next/link';
 
 export default function Navigation() {
   return (
@@ -21,5 +21,5 @@ export default function Navigation() {
       <Spacer />
       {/* Add logo or brand name here */}
     </Flex>
-  )
+  );
 }

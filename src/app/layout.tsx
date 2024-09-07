@@ -1,11 +1,11 @@
-import { Providers } from './providers'
-import Navigation from './components/Navigation'
-import { Box } from '@chakra-ui/react'
+import { Providers } from './providers';
+import Navigation from './components/Navigation';
+import { Box } from '@chakra-ui/react';
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -13,12 +13,10 @@ export default function RootLayout({
         <Providers>
           <Box>
             <Navigation />
-            <Box as="main">
-              {children}
-            </Box>
+            <Box as="main">{children}</Box>
           </Box>
         </Providers>
       </body>
     </html>
-  )
+  );
 }
