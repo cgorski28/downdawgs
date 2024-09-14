@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { MongoClient } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
 
-let cachedDb: any = null;
+let cachedDb: Db | null = null;
 
 async function connectToDatabase(uri: string) {
   if (cachedDb) return cachedDb;
