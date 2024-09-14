@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Box, Flex, Heading, Text, VStack, Container } from '@chakra-ui/react';
 
 export default function MensClub() {
