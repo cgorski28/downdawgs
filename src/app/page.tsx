@@ -3,16 +3,20 @@
 import { useState } from 'react';
 import {
   Box,
+  Flex,
   Heading,
   Text,
   VStack,
   Container,
   Button,
   Input,
-  FormControl,
-  FormLabel,
   useToast,
+  Card,
+  CardBody,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react';
+import { EmailIcon } from '@chakra-ui/icons';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -53,52 +57,76 @@ export default function Home() {
   };
 
   return (
-    <Box minHeight="100vh">
-      {/* Hero section */}
+    <Flex direction="column" height="calc(100vh - 54px)">
       <Box
-        height="80vh"
+        flex="1"
         bgImage="url('/yoga-hero-img.jpg')"
         bgColor="gray.200"
         backgroundSize="cover"
         backgroundPosition="center"
+        position="relative"
       >
         <Container maxW="container.xl" height="100%">
-          <VStack
-            spacing={6}
-            align="flex-start"
-            justify="center"
+          <Flex
             height="100%"
-            maxWidth="600px"
+            direction="column"
+            justifyContent="flex-start"
+            pt="20%"
           >
-            <Heading as="h1" size="3xl" lineHeight="1.2" color="white">
-              Down Dawgs
-            </Heading>
-            <Text fontSize="xl" color="white">
-              Help men build and maintain a mindfulness practice so they can
-              become the person they were meant to be
-            </Text>
-            <form onSubmit={handleSubmit}>
-              <FormControl>
-                <FormLabel htmlFor="email" color="white">
-                  Subscribe to our newsletter
-                </FormLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                  bg="white"
-                />
-              </FormControl>
-              <Button type="submit" colorScheme="teal" size="lg" mt={4}>
-                Subscribe
-              </Button>
-            </form>
-          </VStack>
+            <VStack spacing={6} align="flex-start" width="50%" mb={16}>
+              <Heading
+                as="h1"
+                size="4xl"
+                lineHeight="1.2"
+                color="white"
+                fontWeight="bold"
+              >
+                Down Dawgs
+              </Heading>
+              <Text fontSize="xl" color="white" maxWidth="80%">
+                Helping men build and maintain a mindfulness practice so they
+                can become the person they were meant to be
+              </Text>
+            </VStack>
+
+            <Box width="30%" alignSelf="flex-end">
+              <Card bg="white" borderRadius="xl">
+                <CardBody>
+                  <form onSubmit={handleSubmit}>
+                    <VStack spacing={4} align="stretch">
+                      <Heading size="md">Stay Updated</Heading>
+                      <Text>
+                        Add your email to stay up to date on our latest
+                        offerings
+                      </Text>
+                      <InputGroup>
+                        <InputLeftElement pointerEvents="none">
+                          <EmailIcon color="gray.300" />
+                        </InputLeftElement>
+                        <Input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Email"
+                          required
+                        />
+                      </InputGroup>
+                      <Button
+                        type="submit"
+                        colorScheme="blackAlpha"
+                        size="lg"
+                        width="100%"
+                      >
+                        Join
+                      </Button>
+                    </VStack>
+                  </form>
+                </CardBody>
+              </Card>
+            </Box>
+          </Flex>
         </Container>
       </Box>
-    </Box>
+    </Flex>
   );
 }

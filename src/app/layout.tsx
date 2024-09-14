@@ -13,7 +13,9 @@ export default function RootLayout({
         <Providers>
           <Box>
             <Navigation />
-            <Box as="main">{children}</Box>
+            <Box as="main" pt="54px">
+              {children}
+            </Box>
           </Box>
         </Providers>
       </body>
