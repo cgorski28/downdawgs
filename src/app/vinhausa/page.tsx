@@ -51,24 +51,28 @@ export default function Vinhausa() {
         backgroundSize="cover"
         backgroundPosition="center 65%"
         backgroundRepeat="no-repeat"
-        alignItems="flex-start" // Changed from center to flex-start
-        justifyContent="center"
-        pt={20} // Added top padding
+        alignItems="flex-start"
+        pt={{ base: '100px', md: '250px' }}
       >
-        <VStack
-          spacing={4}
-          align="center"
-          p={8}
-          color="white" // Changed text color to white
-          textShadow="0 0 8px rgba(0,0,0,0.6)" // Added text shadow for better visibility
-        >
-          <Heading as="h1" size="2xl">
-            VinHausa
-          </Heading>
-          <Text fontSize="xl" textAlign="center">
-            Explore our unique yoga experience in the heart of Chicago
-          </Text>
-        </VStack>
+        <Container maxW="container.xl">
+          <VStack spacing={6} align="flex-start" maxW="container.md">
+            <Heading
+              as="h1"
+              size="4xl"
+              color="white"
+              textShadow="0 0 8px rgba(0,0,0,0.6)"
+            >
+              VinHausa
+            </Heading>
+            <Text
+              fontSize="2xl"
+              color="white"
+              textShadow="0 0 8px rgba(0,0,0,0.6)"
+            >
+              Explore our unique yoga experience in the heart of Chicago
+            </Text>
+          </VStack>
+        </Container>
       </Flex>
 
       {/* Content below the fold */}
