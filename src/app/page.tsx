@@ -106,6 +106,7 @@ export default function Home() {
               width={{ base: '100%', md: '30%' }}
               alignSelf={{ base: 'center', md: 'flex-end' }}
               mt={{ base: 12, md: 0 }}
+              mb={{ base: 8, md: 0 }} // Add bottom margin for mobile
             >
               <Card bg="white" borderRadius="xl">
                 <CardBody>
