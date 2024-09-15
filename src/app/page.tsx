@@ -57,7 +57,7 @@ export default function Home() {
   };
 
   return (
-    <Flex direction="column" height="calc(100vh - 54px)">
+    <Flex direction="column" minHeight="calc(100vh - 54px)">
       <Box
         flex="1"
         bgImage="url('/yoga-hero-img.jpg')"
@@ -69,27 +69,44 @@ export default function Home() {
         <Container maxW="container.xl" height="100%">
           <Flex
             height="100%"
-            direction="column"
-            justifyContent="flex-start"
-            pt="20%"
+            direction={{ base: 'column', md: 'column' }}
+            justifyContent={{ base: 'flex-start', md: 'flex-start' }}
+            alignItems={{ base: 'center', md: 'flex-start' }}
+            pt={{ base: '30vh', md: '20%' }}
+            px={{ base: 4, md: 0 }}
           >
-            <VStack spacing={6} align="flex-start" width="50%" mb={16}>
+            <VStack
+              spacing={{ base: 10, md: 6 }}
+              align={{ base: 'center', md: 'flex-start' }}
+              width={{ base: '100%', md: '50%' }}
+              mb={{ base: 16, md: 16 }}
+            >
               <Heading
                 as="h1"
-                size="4xl"
+                size={{ base: '3xl', md: '4xl' }}
                 lineHeight="1.2"
                 color="white"
                 fontWeight="bold"
+                textAlign={{ base: 'center', md: 'left' }}
               >
                 Down Dawgs
               </Heading>
-              <Text fontSize="xl" color="white" maxWidth="80%">
+              <Text
+                fontSize="xl"
+                color="white"
+                maxWidth={{ base: '100%', md: '80%' }}
+                textAlign={{ base: 'center', md: 'left' }}
+              >
                 Helping men build and maintain a mindfulness practice so they
                 can become the person they were meant to be
               </Text>
             </VStack>
 
-            <Box width="30%" alignSelf="flex-end">
+            <Box
+              width={{ base: '100%', md: '30%' }}
+              alignSelf={{ base: 'center', md: 'flex-end' }}
+              mt={{ base: 12, md: 0 }}
+            >
               <Card bg="white" borderRadius="xl">
                 <CardBody>
                   <form onSubmit={handleSubmit}>
@@ -97,7 +114,7 @@ export default function Home() {
                       <Heading size="md">Stay Updated</Heading>
                       <Text>
                         Add your email to stay up to date on our latest
-                        offerings
+                        offerings and events
                       </Text>
                       <InputGroup>
                         <InputLeftElement pointerEvents="none">

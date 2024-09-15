@@ -52,22 +52,28 @@ export default function Vinhausa() {
         backgroundPosition="center 65%"
         backgroundRepeat="no-repeat"
         alignItems="flex-start"
-        pt={{ base: '100px', md: '250px' }}
+        pt={{ base: '30vh', md: '250px' }}
       >
         <Container maxW="container.xl">
-          <VStack spacing={6} align="flex-start" maxW="container.md">
+          <VStack
+            spacing={{ base: 8, md: 6 }}
+            align={{ base: 'center', md: 'flex-start' }}
+            maxW="container.md"
+          >
             <Heading
               as="h1"
-              size="4xl"
+              size={{ base: '3xl', md: '4xl' }}
               color="white"
               textShadow="0 0 8px rgba(0,0,0,0.6)"
+              textAlign={{ base: 'center', md: 'left' }}
             >
               VinHausa
             </Heading>
             <Text
-              fontSize="2xl"
+              fontSize={{ base: 'xl', md: '2xl' }}
               color="white"
               textShadow="0 0 8px rgba(0,0,0,0.6)"
+              textAlign={{ base: 'center', md: 'left' }}
             >
               Explore our unique yoga experience in the heart of Chicago
             </Text>
@@ -76,8 +82,8 @@ export default function Vinhausa() {
       </Flex>
 
       {/* Content below the fold */}
-      <Container maxW="container.xl" py={16}>
-        <VStack spacing={12} align="stretch">
+      <Container maxW="container.xl" py={{ base: 12, md: 16 }}>
+        <VStack spacing={{ base: 10, md: 12 }} align="stretch">
           <Text fontSize="lg" p={6} borderRadius="md" bg="gray.50">
             VinHausa is a play on words, combining "Vinyasa" (from Sanskrit: vi,
             "in a special way," and nyasa, "to place") with "House" music. We
@@ -85,7 +91,10 @@ export default function Vinhausa() {
             middle of Chicago with a DJ playing house music.
           </Text>
 
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
+          <SimpleGrid
+            columns={{ base: 1, md: 3 }}
+            spacing={{ base: 8, md: 10 }}
+          >
             <InfoCard
               title="Breaking Barriers"
               description="VinHausa is completely free. We removed the price to make getting out of your comfort zone easier."
