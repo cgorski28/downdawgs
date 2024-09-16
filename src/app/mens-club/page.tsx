@@ -1,6 +1,5 @@
 'use client';
 
-import { Box, Flex, Heading, Text, VStack, Container } from '@chakra-ui/react';
 import HeroSection from '../components/HeroSection';
 
 export default function MensClub() {

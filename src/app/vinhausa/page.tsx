@@ -8,7 +8,6 @@ import {
   Container,
   SimpleGrid,
   Icon,
-  Flex,
 } from '@chakra-ui/react';
 import { FaYinYang, FaDollarSign, FaUsers } from 'react-icons/fa';
 import HeroSection from '../components/HeroSection';
