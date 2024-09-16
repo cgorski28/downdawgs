@@ -19,6 +19,7 @@ import {
   FaHeartbeat,
   FaEnvelope,
 } from 'react-icons/fa';
+import HeroSection from '../components/HeroSection';
 
 interface BenefitCardProps {
   icon: React.ElementType;
@@ -43,54 +44,11 @@ const BenefitCard: React.FC<BenefitCardProps> = ({
 export default function Corporate() {
   return (
     <Box>
-      <Flex direction="column" minHeight="calc(100vh - 54px)">
-        <Box
-          flex="1"
-          bgImage="url('/office-yoga.avif')"
-          bgColor="gray.200"
-          backgroundSize="cover"
-          backgroundPosition="center"
-          position="relative"
-        >
-          <Container maxW="container.xl" height="100%">
-            <Flex
-              height="100%"
-              direction="column"
-              justifyContent={{ base: 'flex-start', md: 'flex-start' }}
-              alignItems={{ base: 'center', md: 'flex-start' }}
-              pt={{ base: '30vh', md: '20%' }}
-              px={{ base: 4, md: 0 }}
-            >
-              <VStack
-                spacing={{ base: 8, md: 6 }}
-                align={{ base: 'center', md: 'flex-start' }}
-                width={{ base: '100%', md: '50%' }}
-                mb={{ base: 16, md: 16 }}
-              >
-                <Heading
-                  as="h1"
-                  size={{ base: '3xl', md: '4xl' }}
-                  lineHeight="1.2"
-                  color="white"
-                  fontWeight="bold"
-                  textAlign={{ base: 'center', md: 'left' }}
-                >
-                  Corporate Yoga
-                </Heading>
-                <Text
-                  fontSize="xl"
-                  color="white"
-                  maxWidth={{ base: '100%', md: '80%' }}
-                  textAlign={{ base: 'center', md: 'left' }}
-                >
-                  Bring wellness and balance to your workplace
-                </Text>
-              </VStack>
-            </Flex>
-          </Container>
-        </Box>
-      </Flex>
-
+      <HeroSection
+        backgroundImage="/office-yoga.avif"
+        title="Corporate Yoga"
+        subtitle="Bring wellness and balance to your workplace"
+      />
       <Container maxW="container.xl" py={16}>
         <VStack spacing={16} align="stretch">
           <Box>

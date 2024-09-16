@@ -11,6 +11,7 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import { FaYinYang, FaDollarSign, FaUsers } from 'react-icons/fa';
+import HeroSection from '../components/HeroSection';
 
 type InfoCardProps = {
   title: string;
@@ -44,43 +45,12 @@ const InfoCard = ({ title, description, icon }: InfoCardProps) => (
 export default function Vinhausa() {
   return (
     <Box>
-      {/* Hero Section */}
-      <Flex
-        height="calc(100vh - 54px)"
-        backgroundImage="url('/yogainthepark.jpg')"
-        backgroundSize="cover"
+      <HeroSection
+        backgroundImage="/yogainthepark.jpg"
+        title="VinHausa"
+        subtitle="Explore our unique yoga experience in the heart of Chicago"
         backgroundPosition="center 65%"
-        backgroundRepeat="no-repeat"
-        alignItems="flex-start"
-        pt={{ base: '30vh', md: '250px' }}
-      >
-        <Container maxW="container.xl">
-          <VStack
-            spacing={{ base: 8, md: 6 }}
-            align={{ base: 'center', md: 'flex-start' }}
-            maxW="container.md"
-          >
-            <Heading
-              as="h1"
-              size={{ base: '3xl', md: '4xl' }}
-              color="white"
-              textShadow="0 0 8px rgba(0,0,0,0.6)"
-              textAlign={{ base: 'center', md: 'left' }}
-            >
-              VinHausa
-            </Heading>
-            <Text
-              fontSize={{ base: 'xl', md: '2xl' }}
-              color="white"
-              textShadow="0 0 8px rgba(0,0,0,0.6)"
-              textAlign={{ base: 'center', md: 'left' }}
-            >
-              Explore our unique yoga experience in the heart of Chicago
-            </Text>
-          </VStack>
-        </Container>
-      </Flex>
-
+      />
       {/* Content below the fold */}
       <Container maxW="container.xl" py={{ base: 12, md: 16 }}>
         <VStack spacing={{ base: 10, md: 12 }} align="stretch">
