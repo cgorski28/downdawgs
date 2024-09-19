@@ -9,12 +9,47 @@ import {
   VStack,
   Collapse,
   useDisclosure,
+  Button,
+  Spinner,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import NextLink from 'next/link';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function Navigation() {
   const { isOpen, onToggle, onClose } = useDisclosure();
+  const { status } = useSession();
+  const router = useRouter();
+
+  const showSession = () => {
+    if (status === 'authenticated') {
+      return (
+        <Button
+          variant="solid"
+          bg="white"
+          color="gray.800"
+          onClick={() => {
+            signOut({ redirect: false }).then(() => {
+              router.push('/');
+            });
+          }}
+        >
+          Sign Out
+        </Button>
+      );
+    } else if (status === 'loading') {
+      return <Spinner color="white" size="sm" />;
+    } else {
+      return (
+        <NextLink href="/login" passHref legacyBehavior>
+          <Button as={ChakraLink} variant="solid" bg="white" color="gray.800">
+            Sign In
+          </Button>
+        </NextLink>
+      );
+    }
+  };
 
   return (
     <Box as="nav" position="fixed" top={0} left={0} right={0} zIndex={10}>
@@ -35,7 +70,8 @@ export default function Navigation() {
         </Flex>
 
         <Spacer />
-        {/* Add logo or brand name here */}
+        {/* Session status on the right side */}
+        <Box>{showSession()}</Box>
       </Flex>
 
       {/* Mobile menu */}
@@ -69,8 +105,13 @@ function NavLinks({ closeMenu }: { closeMenu?: () => void }) {
         </ChakraLink>
       </NextLink>
       <NextLink href="/corporate" passHref legacyBehavior>
-        <ChakraLink color="white" fontWeight="bold" onClick={closeMenu}>
+        <ChakraLink mr={4} color="white" fontWeight="bold" onClick={closeMenu}>
           Corporate
+        </ChakraLink>
+      </NextLink>
+      <NextLink href="/about" passHref legacyBehavior>
+        <ChakraLink color="white" fontWeight="bold" onClick={closeMenu}>
+          About
         </ChakraLink>
       </NextLink>
     </>
