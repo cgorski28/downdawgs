@@ -1,39 +1,90 @@
-import React from 'react';
-import { Box, Grid, Text } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  Grid,
+  Text,
+  Button,
+  Flex,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react';
+import { EventDocument, EventType, EventTypeDisplay } from '@/models/Event';
+import AddEventModal from './AddEventModal'; // New import
 
-interface Event {
-  date: Date;
-  title: string;
-  description?: string;
-  time: string;
-  location: string;
-  color: string; // Add this new property
+interface CalendarProps {
+  events: EventDocument[];
+  addEvent: (event: EventDocument) => void;
+  fetchEvents: (year: number, month: number) => void;
+  isSignedIn: boolean; // New prop
 }
 
-const Calendar: React.FC = () => {
-  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth();
-  const currentYear = currentDate.getFullYear();
+const eventTypeColors: Record<EventType, string> = {
+  [EventType.StudioThree]: 'blue.200',
+  [EventType.MensClub]: 'green.200',
+  [EventType.Vinhausa]: 'purple.200',
+  [EventType.Other]: 'gray.200', // Add this line
+};
 
-  // Sample event
-  const events: Event[] = [
-    {
-      date: new Date(currentYear, 8, 22), // September 22nd (month is 0-indexed)
-      title: 'VinHausa Flow',
-      description: 'Taught by Colton',
-      time: '18:00 - 19:30',
-      location: 'Millennium Park',
-      color: 'teal.100', // Green color for VinHausa
-    },
-    {
-      date: new Date(currentYear, 8, 18), // September 18th
-      title: "Men's Club",
-      time: '19:00 - 20:30',
-      location: 'Community Center',
-      color: 'purple.100', // Light purple color for Men's Club
-    },
-  ];
+const Calendar: React.FC<CalendarProps> = ({
+  events,
+  addEvent,
+  fetchEvents,
+  isSignedIn,
+}) => {
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [eventMap, setEventMap] = useState<Record<string, EventDocument>>({});
+  const [selectedEvent, setSelectedEvent] = useState<EventDocument | null>(
+    null
+  );
+
+  const {
+    isOpen: isAddEventOpen,
+    onOpen: onAddEventOpen,
+    onClose: onAddEventClose,
+  } = useDisclosure();
+  const {
+    isOpen: isEventDetailsOpen,
+    onOpen: onEventDetailsOpen,
+    onClose: onEventDetailsClose,
+  } = useDisclosure();
+
+  useEffect(() => {
+    fetchEvents(currentYear, currentMonth + 1);
+  }, [currentMonth, currentYear, fetchEvents]);
+
+  useEffect(() => {
+    const newEventMap: Record<string, EventDocument> = {};
+    events.forEach((event) => {
+      const dateKey = new Date(event.eventDate).toISOString().split('T')[0];
+      newEventMap[dateKey] = event;
+    });
+    setEventMap(newEventMap);
+  }, [events]);
+
+  const goToPreviousMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const goToNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
 
   const getDaysInMonth = (month: number, year: number) => {
     return new Date(year, month + 1, 0).getDate();
@@ -49,98 +100,165 @@ const Calendar: React.FC = () => {
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const blanks = Array.from({ length: firstDayOfMonth }, (_, i) => i);
 
-  const getEventForDate = (day: number) => {
-    return events.find(
-      (event) =>
-        event.date.getFullYear() === currentYear &&
-        event.date.getMonth() === currentMonth &&
-        event.date.getDate() === day
-    );
+  const formatEventTime = (startTime: string, duration: number) => {
+    const [hours, minutes] = startTime.split(':').map(Number);
+    const start = new Date(0, 0, 0, hours, minutes);
+    const end = new Date(start.getTime() + duration * 60000);
+    return `${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  };
+
+  const handleDayClick = (event: EventDocument | undefined) => {
+    if (event) {
+      setSelectedEvent(event);
+      onEventDetailsOpen();
+    }
   };
 
   return (
-    <Box borderWidth={1} borderRadius="lg" p={4}>
-      <Text fontSize="2xl" fontWeight="bold" mb={4}>
-        {new Date(currentYear, currentMonth).toLocaleString('default', {
-          month: 'long',
-        })}{' '}
-        {currentYear}
-      </Text>
-      <Grid templateColumns="repeat(7, 1fr)" gap={2}>
+    <Box
+      borderWidth={1}
+      borderRadius="lg"
+      p={{ base: 2, md: 6 }}
+      maxWidth="100%"
+      overflow="hidden"
+    >
+      <Flex
+        justifyContent="space-between"
+        alignItems="center"
+        mb={{ base: 2, md: 6 }}
+      >
+        <Text fontSize={{ base: 'sm', md: '2xl' }} fontWeight="bold">
+          {new Date(currentYear, currentMonth).toLocaleString('default', {
+            month: 'long',
+          })}{' '}
+          {currentYear}
+        </Text>
+        {isSignedIn && (
+          <Button size={{ base: 'xs', md: 'md' }} onClick={onAddEventOpen}>
+            Add
+          </Button>
+        )}
+      </Flex>
+      <Flex
+        justifyContent="space-between"
+        alignItems="center"
+        mb={{ base: 2, md: 6 }}
+      >
+        <Button size={{ base: 'xs', md: 'md' }} onClick={goToPreviousMonth}>
+          &lt;
+        </Button>
+        <Button size={{ base: 'xs', md: 'md' }} onClick={goToNextMonth}>
+          &gt;
+        </Button>
+      </Flex>
+      <Grid templateColumns="repeat(7, 1fr)" gap={{ base: 0.5, md: 3 }}>
         {daysOfWeek.map((day) => (
-          <Box key={day} textAlign="center" fontWeight="bold">
-            {day}
+          <Box
+            key={day}
+            textAlign="center"
+            fontWeight="bold"
+            fontSize={{ base: '2xs', md: 'md' }}
+          >
+            {day.slice(0, 3)}
           </Box>
         ))}
         {blanks.map((_, index) => (
           <Box key={`blank-${index}`} />
         ))}
         {days.map((day) => {
-          const event = getEventForDate(day);
+          const dateKey = new Date(currentYear, currentMonth, day)
+            .toISOString()
+            .split('T')[0];
+          const event = eventMap[dateKey];
+          const backgroundColor = event
+            ? eventTypeColors[event.eventType]
+            : 'transparent';
+
           return (
             <Box
-              key={day}
-              height="80px"
+              key={`day-${day}`}
+              borderWidth={1}
+              p={{ base: 0.5, md: 3 }}
+              aspectRatio={1}
+              backgroundColor={backgroundColor}
+              borderRadius={{ base: 'sm', md: 'md' }}
+              onClick={() => handleDayClick(event)}
+              cursor={event ? 'pointer' : 'default'}
               position="relative"
-              style={{ perspective: '1000px' }}
             >
-              <Box
+              <Text
                 position="absolute"
-                width="100%"
-                height="100%"
-                style={{ transformStyle: 'preserve-3d' }}
-                transition="transform 0.6s"
-                _hover={event ? { transform: 'rotateY(180deg)' } : {}}
+                top={{ base: 0.5, md: 2 }}
+                left={{ base: 0.5, md: 2 }}
+                fontSize={{ base: '2xs', md: 'lg' }}
+                fontWeight="normal"
               >
-                <Box
-                  position="absolute"
-                  width="100%"
-                  height="100%"
-                  style={{ backfaceVisibility: 'hidden' }}
-                  borderWidth={1}
-                  borderRadius="md"
-                  p={2}
-                  bg={event ? event.color : 'transparent'}
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="space-between"
-                >
-                  <Text color="gray.800">{day}</Text>
-                  {event && (
-                    <Text fontSize="xs" fontWeight="bold" color="gray.800">
-                      {event.title}
-                    </Text>
-                  )}
-                </Box>
-                {event && (
-                  <Box
-                    position="absolute"
-                    width="100%"
-                    height="100%"
-                    style={{ backfaceVisibility: 'hidden' }}
-                    borderWidth={1}
-                    borderRadius="md"
-                    p={2}
-                    bg={event.color}
-                    transform="rotateY(180deg)"
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    alignItems="center"
-                    textAlign="center"
-                  >
-                    <Text fontSize="sm" fontWeight="bold">
-                      {event.title}
-                    </Text>
-                    <Text fontSize="xs">{event.time}</Text>
-                    <Text fontSize="xs">{event.location}</Text>
-                  </Box>
-                )}
-              </Box>
+                {day}
+              </Text>
             </Box>
           );
         })}
       </Grid>
+
+      {/* Color key */}
+      <Flex flexWrap="wrap" justifyContent="center" mt={{ base: 4, md: 6 }}>
+        {Object.entries(eventTypeColors).map(([type, color]) => (
+          <Flex key={type} alignItems="center" mr={4} mb={2}>
+            <Box
+              width="20px"
+              height="20px"
+              backgroundColor={color}
+              borderRadius="sm"
+              mr={2}
+            />
+            <Text fontSize={{ base: 'xs', md: 'sm' }}>
+              {EventTypeDisplay[type as EventType]}
+            </Text>
+          </Flex>
+        ))}
+      </Flex>
+
+      <AddEventModal
+        isOpen={isAddEventOpen}
+        onClose={onAddEventClose}
+        addEvent={addEvent}
+        currentYear={currentYear}
+        currentMonth={currentMonth}
+      />
+      <Modal isOpen={isEventDetailsOpen} onClose={onEventDetailsClose}>
+        <ModalOverlay />
+        <ModalContent mx={{ base: 4, md: 0 }}>
+          <ModalHeader>{selectedEvent?.title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {selectedEvent && (
+              <>
+                <Text mb={2}>
+                  <strong>Date:</strong>{' '}
+                  {new Date(selectedEvent.eventDate).toLocaleDateString()}
+                </Text>
+                <Text mb={2}>
+                  <strong>Location:</strong> {selectedEvent.location}
+                </Text>
+                <Text mb={2}>
+                  <strong>Time:</strong>{' '}
+                  {formatEventTime(
+                    selectedEvent.startTime,
+                    selectedEvent.duration
+                  )}
+                </Text>
+                <Text mb={2}>
+                  <strong>Event Type:</strong>{' '}
+                  {EventTypeDisplay[selectedEvent.eventType as EventType]}
+                </Text>
+                <Text mb={2}>
+                  <strong>Description:</strong> {selectedEvent.description}
+                </Text>
+              </>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
